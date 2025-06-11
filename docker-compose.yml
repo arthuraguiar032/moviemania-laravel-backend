@@ -1,0 +1,29 @@
+
+services:
+  laravelapp:
+    container_name: laravelapp
+    image: aguiarthur/laravelapp:1.0.1
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data: {}
