@@ -17,10 +17,16 @@ docker compose down
 docker exec laravelapp php artisan migrate
 
 ## Acessar bash dentro de um container
-docker exec -it <container_name> bash
+docker exec -it <NomeDoContainer> bash
 
 ## Criar Model com migration
-php artisan make:model NomeDoModel -m
+php artisan make:model <NomeDoModel> -m
+
+## Criar Controllers para os Endpoints
+php artisan make:controller <NomeDoController>
+
+## Criar Controllers para Api Rest
+php artisan make:controller <NomeDoController> --api
 
 ## About Laravel
 
