@@ -18,11 +18,27 @@ return Application::configure(basePath: dirname(__DIR__))
     })
 
     ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->shouldRenderJsonWhen(function ($e, $request) {
+            return true;
+        });
+        
         $exceptions->render(function (\Illuminate\Validation\ValidationException $e, $request) {
             return response()->json([
                 'message' => 'Erro de validação',
                 'errors' => $e->errors(),
             ], 422);
+        });
+
+        $exceptions->render(function (\Symfony\Component\Routing\Exception\RouteNotFoundException $e, $request) {
+            return response()->json([
+                'message' => 'Não autenticado. Token ausente ou inválido (rota [login] não encontrada).',
+            ], 401);
+        });
+
+        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, $request) {
+            return response()->json([
+                'message' => 'Não autenticado. Token ausente ou inválido.',
+            ], 401);
         });
 
         $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, $request) {

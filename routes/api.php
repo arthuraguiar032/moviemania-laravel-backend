@@ -13,7 +13,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Exemplo de rota protegida:
-    Route::get('/perfil', function () {
+    Route::get('/profile', function () {
         return auth()->user();
     });
 });
