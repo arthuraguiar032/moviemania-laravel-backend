@@ -12,8 +12,30 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->group('api', [
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        ]);
     })
+
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (\Illuminate\Validation\ValidationException $e, $request) {
+            return response()->json([
+                'message' => 'Erro de validação',
+                'errors' => $e->errors(),
+            ], 422);
+        });
+
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, $request) {
+            return response()->json([
+                'message' => $e->getMessage() ?: 'Erro HTTP',
+            ], $e->getStatusCode() ?: 500);
+        });
+
+        $exceptions->render(function (\Throwable $e, $request) {
+            return response()->json([
+                'message' => 'Erro interno do servidor',
+                'exception' => get_class($e),
+                'error' => $e->getMessage(),
+            ], 500);
+        });
     })->create();

@@ -14,6 +14,10 @@ class RegisterRequest extends FormRequest
         return true;
     }
 
+    public function wantsJson(): bool {
+        return true; // Força o retorno em JSON
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,7 +27,7 @@ class RegisterRequest extends FormRequest
         return [
             'name'        => 'required|string|max:255',
             'email'       => 'required|email|unique:users,email',
-            'password'    => 'required|string|min:6|confirmed',
+            'password'    => 'required|string|min:6|max:20',
             'avatar_url'  => 'nullable|url',
             'bio'         => 'nullable|string|max:500',
     ];
