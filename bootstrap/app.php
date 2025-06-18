@@ -12,12 +12,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        
+        $middleware->alias([
+            'tmdb.validate' => \App\Http\Middleware\ValidateTmdbId::class,
+        ]);
+        
         $middleware->group('api', [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
     })
 
     ->withExceptions(function (Exceptions $exceptions) {
+        
         $exceptions->shouldRenderJsonWhen(function ($e, $request) {
             return true;
         });
